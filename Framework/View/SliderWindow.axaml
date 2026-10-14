@@ -1,0 +1,59 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:local="using:Framework.ViewModel"
+               x:Class="Framework.View.SliderWindow"
+               x:DataType="local:SliderVM"
+               Title="Slider"
+               Closing="WindowClosing"
+               Height="125"
+               Width="600"
+               WindowStartupLocation="CenterScreen"
+               CanResize="False"
+               Classes.computing="{Binding Path=IsComputing}"
+               Icon="/Images/Icon.png">
+
+    <v:ChildWindow.Styles>
+        <!-- Busy cursor while the algorithm runs -->
+        <Style Selector=":is(Window).computing">
+            <Setter Property="Cursor" Value="AppStarting"/>
+        </Style>
+    </v:ChildWindow.Styles>
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="10,*,10">
+
+        <StackPanel Grid.Row="1"
+                    Margin="20,0,20,0">
+            <TextBlock Text="{Binding Path=Description}"
+                       Foreground="{Binding Path=Theme.TextForeground}"
+                       TextAlignment="Left"
+                       FontSize="15"
+                       Height="25"
+                       HorizontalAlignment="Left"/>
+
+            <Grid Height="50"
+                  ColumnDefinitions="*,50">
+                <Slider x:Name="slider"
+                        Grid.Column="0"
+                        Orientation="Horizontal"
+                        Foreground="{Binding Path=Theme.TextForeground}"
+                        Minimum="{Binding Path=MinimumValue}"
+                        Maximum="{Binding Path=MaximumValue}"
+                        Value="{Binding Path=Value}"
+                        SmallChange="{Binding Path=Frequency}"
+                        TickFrequency="{Binding Path=Frequency}"
+                        TickPlacement="BottomRight"
+                        IsSnapToTickEnabled="True"
+                        Cursor="Hand"
+                        VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding #slider.Value}"
+                           Foreground="{Binding Path=Theme.TextForeground}"
+                           TextAlignment="Center"
+                           FontSize="15"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</v:ChildWindow>

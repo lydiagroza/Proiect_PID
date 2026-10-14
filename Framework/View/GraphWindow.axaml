@@ -1,0 +1,28 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:controls="using:Framework.View.Controls"
+               xmlns:local="using:Framework.ViewModel"
+               x:Class="Framework.View.GraphWindow"
+               x:DataType="local:GraphVM"
+               Title="Graph"
+               Closing="WindowClosing"
+               Height="500"
+               Width="500"
+               WindowStartupLocation="CenterScreen"
+               CanResize="False"
+               Icon="/Images/Icon.png">
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="15,*,15"
+          ColumnDefinitions="15,*,15">
+
+        <controls:PlotView Grid.Row="1"
+                           Grid.Column="1"
+                           Model="{Binding Path=Plot}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Width="430"
+                           Height="430"/>
+    </Grid>
+</v:ChildWindow>

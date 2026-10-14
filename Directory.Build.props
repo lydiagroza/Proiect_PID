@@ -1,0 +1,91 @@
+<Project>
+
+  <!--
+    Settings shared by every project of the solution.
+    net10.0 (.NET 10, supported until November 2028) builds with the .NET 10 SDK or newer (Visual Studio 2026,
+    Rider, VS Code) and, with RollForward=Major, runs on any installed .NET runtime from version 10 on.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Deterministic>true</Deterministic>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <!--
+    Image backend: the image library every project of the solution uses. Both expose the same Emgu CV API
+    (Image<Gray, byte>, Image<Bgr, byte>, ...), so the code does not change when switching:
+
+      EmguCV (default)    the real Emgu CV 4.13 with native OpenCV (adds the OpenCV functions of the modules core,
+                          imgproc, imgcodecs and photo), in lib/EmguCV, for Windows x64, macOS 11+ and Linux
+                          (x64 and ARM64, any distribution with glibc 2.17 or newer), see README.md
+      Portable            ImageCore, a pure C# implementation with the same results as Emgu CV, compiled in
+                          lib/ImageCore; runs on Windows, macOS and Linux (x64 and ARM64)
+
+    Switch with:  dotnet build -p:ImageBackend=Portable   (or change the value below)
+  -->
+  <PropertyGroup>
+    <ImageBackend Condition="'$(ImageBackend)' == ''">EmguCV</ImageBackend>
+    <ImageCoreDir>$(MSBuildThisFileDirectory)lib\ImageCore\</ImageCoreDir>
+    <EmguCVDir>$(MSBuildThisFileDirectory)lib\EmguCV\</EmguCVDir>
+  </PropertyGroup>
+
+  <!--
+    The ImageCore library: lib/ImageCore/ImageCore.dll and ImageCore.xml are its public API (signatures only)
+    and documentation, which the projects compile against; lib/ImageCore/runtime/ImageCore.dll is the implementation,
+    copied next to the application.
+  -->
+  <ItemGroup Condition="'$(ImageBackend)' == 'Portable'">
+    <Reference Include="ImageCore">
+      <HintPath>$(ImageCoreDir)runtime\ImageCore.dll</HintPath>
+      <ReferenceAssembly>$(ImageCoreDir)ImageCore.dll</ReferenceAssembly>
+    </Reference>
+  </ItemGroup>
+  <!--
+    Emgu CV: lib/EmguCV/Emgu.CV.dll and Emgu.CV.xml are its C# API and documentation (from the Emgu.CV 4.13.0.5924
+    NuGet package); lib/EmguCV/<runtime identifier> has the native OpenCV library, which Framework.csproj copies next
+    to the application. The System.Text.Json 9 that Emgu.CV.dll also needs is included in .NET 10.
+  -->
+  <ItemGroup Condition="'$(ImageBackend)' == 'EmguCV'">
+    <Reference Include="Emgu.CV" HintPath="$(EmguCVDir)Emgu.CV.dll" />
+  </ItemGroup>
+
+  <Target Name="ValidateImageBackend" BeforeTargets="Restore;CollectPackageReferences;Build"
+          Condition="'$(ImageBackend)' != 'Portable' and '$(ImageBackend)' != 'EmguCV'">
+    <Error Text="Unknown ImageBackend '$(ImageBackend)'. Use Portable or EmguCV." />
+  </Target>
+
+  <Target Name="ValidateImageCore" BeforeTargets="ResolveAssemblyReferences"
+          Condition="'$(ImageBackend)' == 'Portable' and (!Exists('$(ImageCoreDir)ImageCore.dll') or !Exists('$(ImageCoreDir)runtime\ImageCore.dll'))">
+    <Error Text="The ImageCore library is missing: copy the lib folder of the framework again (it needs lib/ImageCore/ImageCore.dll and lib/ImageCore/runtime/ImageCore.dll)." />
+  </Target>
+
+  <Target Name="ValidateEmguCV" BeforeTargets="ResolveAssemblyReferences"
+          Condition="'$(ImageBackend)' == 'EmguCV' and !Exists('$(EmguCVDir)Emgu.CV.dll')">
+    <Error Text="The Emgu CV library is missing: copy the lib folder of the framework again (it needs lib/EmguCV/Emgu.CV.dll)." />
+  </Target>
+
+  <!--
+    The application's Framework.deps.json lists the libraries that .NET loads, and the SDK writes it again only when a
+    project file changes. After a switch with -p:ImageBackend=... it would still name the previous library, and the
+    application would stop with "Could not load file or assembly", so it is deleted (and written again by the build)
+    when the backend differs from the one of the previous build, which is kept in obj.
+  -->
+  <Target Name="ImageBackendSwitch" BeforeTargets="GenerateBuildDependencyFile">
+    <PropertyGroup>
+      <ImageBackendFile>$(IntermediateOutputPath)ImageBackend.txt</ImageBackendFile>
+    </PropertyGroup>
+    <ReadLinesFromFile File="$(ImageBackendFile)" Condition="Exists('$(ImageBackendFile)')">
+      <Output TaskParameter="Lines" PropertyName="PreviousImageBackend" />
+    </ReadLinesFromFile>
+    <Delete Files="$(ProjectDepsFilePath)" Condition="'$(PreviousImageBackend)' != '$(ImageBackend)'" />
+    <WriteLinesToFile File="$(ImageBackendFile)" Lines="$(ImageBackend)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <FileWrites Include="$(ImageBackendFile)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

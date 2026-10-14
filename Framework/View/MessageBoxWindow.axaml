@@ -1,0 +1,43 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:local="using:Framework.ViewModel"
+               x:Class="Framework.View.MessageBoxWindow"
+               x:DataType="local:MessageBoxVM"
+               Title="{Binding Path=Caption}"
+               Closing="WindowClosing"
+               SizeToContent="WidthAndHeight"
+               MaxWidth="720"
+               CanResize="False"
+               WindowStartupLocation="CenterOwner"
+               Icon="/Images/Icon.png">
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="*,Auto"
+          MinWidth="320">
+
+        <ScrollViewer Grid.Row="0"
+                      Margin="20,20,20,12"
+                      MaxHeight="480"
+                      HorizontalScrollBarVisibility="Disabled">
+            <SelectableTextBlock Text="{Binding Path=Message}"
+                                 Foreground="{Binding Path=Theme.TextForeground}"
+                                 TextWrapping="Wrap"
+                                 FontSize="14"/>
+        </ScrollViewer>
+
+        <Button Grid.Row="1"
+                Content="OK"
+                IsDefault="True"
+                IsCancel="True"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Width="80"
+                Margin="0,0,0,16"
+                BorderThickness="2"
+                Foreground="{Binding Path=Theme.ButtonForegroundColor}"
+                Background="{Binding Path=Theme.ButtonBackgroundColor}"
+                BorderBrush="{Binding Path=Theme.ButtonBorderBrush}"
+                Click="OkClick"/>
+    </Grid>
+</v:ChildWindow>

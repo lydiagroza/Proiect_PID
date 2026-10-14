@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Framework</RootNamespace>
+    <AssemblyName>Framework</AssemblyName>
+    <Product>Image Processing Framework</Product>
+    <ApplicationIcon>Images\Icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Images\Icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.3" />
+    <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Algorithms\Algorithms.csproj" />
+  </ItemGroup>
+
+  <!--
+    The image library (ImageCore or Emgu CV) is referenced in Directory.Build.props.
+    With Emgu CV, the application also needs the native OpenCV library (cvextern) of the operating system it runs on:
+    lib/EmguCV/<runtime identifier> has it for win-x64, linux-x64, linux-arm64 and osx (Intel and Apple Silicon),
+    and it is copied to runtimes/<runtime identifier>/native, where Emgu CV looks for it. Without a runtime identifier
+    all of them are copied (Emgu CV loads the right one); with one (dotnet publish -r ...), only that one.
+  -->
+  <PropertyGroup Condition="'$(ImageBackend)' == 'EmguCV' and '$(RuntimeIdentifier)' != ''">
+    <EmguCVNativeRid>$(RuntimeIdentifier)</EmguCVNativeRid>
+    <EmguCVNativeRid Condition="$(RuntimeIdentifier.StartsWith('osx'))">osx</EmguCVNativeRid>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(ImageBackend)' == 'EmguCV' and '$(RuntimeIdentifier)' == ''">
+    <None Include="$(EmguCVDir)**\*" Exclude="$(EmguCVDir)*.*" Link="runtimes\%(RecursiveDir)native\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EmguCVNativeRid)' != ''">
+    <None Include="$(EmguCVDir)$(EmguCVNativeRid)\*" Link="runtimes\$(EmguCVNativeRid)\native\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <Target Name="ValidateEmguCVNative" BeforeTargets="Build"
+          Condition="'$(EmguCVNativeRid)' != '' and !Exists('$(EmguCVDir)$(EmguCVNativeRid)')">
+    <Warning Text="lib/EmguCV has no native Emgu CV library for $(RuntimeIdentifier) (there are: win-x64, linux-x64, linux-arm64, osx-x64 and osx-arm64), so Emgu CV will not work in this build." />
+  </Target>
+
+</Project>

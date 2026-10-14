@@ -1,0 +1,37 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:controls="using:Framework.View.Controls"
+               xmlns:local="using:Framework.ViewModel"
+               xmlns:oxy="using:OxyPlot"
+               x:Class="Framework.View.HistogramWindow"
+               x:DataType="local:HistogramVM"
+               Title="{Binding Path=Title}"
+               Closing="WindowClosing"
+               SizeToContent="WidthAndHeight"
+               MinWidth="400"
+               WindowStartupLocation="CenterScreen"
+               CanResize="False"
+               Icon="/Images/Icon.png">
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}">
+        <!-- One plot per channel, side by side -->
+        <ItemsControl ItemsSource="{Binding Path=Plots}"
+                      HorizontalAlignment="Center"
+                      Margin="15">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="oxy:PlotModel">
+                    <controls:PlotView Model="{Binding}"
+                                       Height="360"
+                                       Width="360"
+                                       Margin="5"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</v:ChildWindow>

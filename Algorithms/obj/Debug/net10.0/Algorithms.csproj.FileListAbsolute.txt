@@ -1,0 +1,14 @@
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/bin/Debug/net10.0/Algorithms.deps.json
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/bin/Debug/net10.0/Algorithms.dll
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/bin/Debug/net10.0/Algorithms.pdb
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/bin/Debug/net10.0/Emgu.CV.dll
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/bin/Debug/net10.0/Emgu.CV.xml
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.csproj.AssemblyReference.cache
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.GeneratedMSBuildEditorConfig.editorconfig
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.csproj.CoreCompileInputs.cache
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.csproj.Up2Date
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.dll
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/refint/Algorithms.dll
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/Algorithms.pdb
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/ImageBackend.txt
+/Users/lydiagroza/Downloads/PID_Framework_Avalonia/Algorithms/obj/Debug/net10.0/ref/Algorithms.dll

@@ -1,0 +1,864 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ImageCore</name>
+    </assembly>
+    <members>
+        <member name="T:Emgu.CV.CvArray`1">
+            <summary>
+            Base class of <see cref="T:Emgu.CV.Image`2"/>: a two-dimensional array of pixels,
+            each with <see cref="P:Emgu.CV.CvArray`1.NumberOfChannels"/> values of type <typeparamref name="TDepth"/>.
+            </summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.SizeOfElement">
+            <summary>The size in bytes of one channel value.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Size">
+            <summary>The width and height of the image, in pixels.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Width">
+            <summary>The width of the image (the number of columns), in pixels.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Height">
+            <summary>The height of the image (the number of rows), in pixels.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Rows">
+            <summary>The number of rows: the same as Height.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Cols">
+            <summary>The number of columns: the same as Width.</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.NumberOfChannels">
+            <summary>The number of channels of every pixel: 1 for Gray, 3 for Bgr, 4 for Bgra, ...</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.ManagedArray">
+            <summary>The pixel values as a [row, column, channel] array (for an image, the same array as Data).</summary>
+        </member>
+        <member name="P:Emgu.CV.CvArray`1.Bytes">
+            <summary>A copy of the raw pixel data (row by row), or sets the pixel data from such a copy.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.SetValue(System.Double,Emgu.CV.CvArray{System.Byte})">
+            <summary>Sets every channel of the pixels selected by <paramref name="mask"/> (all pixels if null) to <paramref name="value"/>.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.SetValue(Emgu.CV.Structure.MCvScalar,Emgu.CV.CvArray{System.Byte})">
+            <summary>Sets channel i of the pixels selected by <paramref name="mask"/> (all pixels if null) to value.Vi.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.SetZero">
+            <summary>Sets every channel of every pixel to 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.CopyTo(Emgu.CV.CvArray{`0})">
+            <summary>Copies the pixel values to <paramref name="destination"/>, which must have the same size and channels.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1._Not">
+            <summary>Inverts every bit of every value, in place.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.Dispose">
+            <summary>Releases the image (kept for compatibility with Emgu CV: the pixels are managed memory).</summary>
+        </member>
+        <member name="M:Emgu.CV.CvArray`1.Dispose(System.Boolean)">
+            <summary>The pixels are managed memory, so there is nothing to release; kept for compatibility with Emgu CV.</summary>
+        </member>
+        <member name="T:Emgu.CV.CvEnum.BorderType">
+            <summary>
+            How the pixels outside an image are made up (for example by <see cref="M:Emgu.CV.CvInvoke.CopyMakeBorder(Emgu.CV.IInputArray,Emgu.CV.IOutputArray,System.Int32,System.Int32,System.Int32,System.Int32,Emgu.CV.CvEnum.BorderType,Emgu.CV.Structure.MCvScalar)"/>).
+            </summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.NegativeOne">
+            <summary>Not a border type (-1); CopyMakeBorder does not support it.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Constant">
+            <summary>A constant value: iiiiii|abcdefgh|iiiiiii.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Replicate">
+            <summary>The edge pixel repeated: aaaaaa|abcdefgh|hhhhhhh.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Reflect">
+            <summary>Mirrored, edge included: fedcba|abcdefgh|hgfedcb.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Wrap">
+            <summary>Wrapped around: cdefgh|abcdefgh|abcdefg.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Reflect101">
+            <summary>Mirrored, edge excluded: gfedcb|abcdefgh|gfedcba.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Transparent">
+            <summary>The pixels outside are left unchanged: uvwxyz|abcdefgh|ijklmno; CopyMakeBorder does not support it.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Default">
+            <summary>The default border: the same as Reflect101.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.BorderType.Isolated">
+            <summary>Flag: do not look outside the region of interest (no effect on whole images).</summary>
+        </member>
+        <member name="T:Emgu.CV.CvEnum.DepthType">
+            <summary>
+            The type of the channel values: Cv8U = byte, Cv8S = sbyte, Cv16U = ushort, Cv16S = short,
+            Cv32S = int, Cv32F = float, Cv64F = double. Default means "the depth of the input".
+            </summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Default">
+            <summary>The depth of the input.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv8U">
+            <summary>byte: 8-bit unsigned integers, 0 to 255.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv8S">
+            <summary>sbyte: 8-bit signed integers, -128 to 127.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv16U">
+            <summary>ushort: 16-bit unsigned integers, 0 to 65535.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv16S">
+            <summary>short: 16-bit signed integers, -32768 to 32767.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv32S">
+            <summary>int: 32-bit signed integers.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv32F">
+            <summary>float: 32-bit floating point numbers.</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.DepthType.Cv64F">
+            <summary>double: 64-bit floating point numbers.</summary>
+        </member>
+        <member name="T:Emgu.CV.CvEnum.FlipType">
+            <summary>
+            The type of a flip operation.
+            </summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.FlipType.Vertical">
+            <summary>Flip around the x-axis (upside down).</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.FlipType.Horizontal">
+            <summary>Flip around the y-axis (mirror left-right).</summary>
+        </member>
+        <member name="F:Emgu.CV.CvEnum.FlipType.Both">
+            <summary>Flip around both axes.</summary>
+        </member>
+        <member name="T:Emgu.CV.CvInvoke">
+            <summary>
+            The OpenCV functions of the portable image core, with the names and arguments of Emgu CV's CvInvoke.
+            They work on images; Add, Subtract, Multiply, Divide and AbsDiff also accept a <see cref="T:Emgu.CV.ScalarArray"/> as one input.
+            The output image must already have the right size (and, unless <c>dtype</c> says otherwise, the depth of the input).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.Add(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray,Emgu.CV.CvEnum.DepthType)">
+            <summary>dst = src1 + src2 (saturated); where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.Subtract(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray,Emgu.CV.CvEnum.DepthType)">
+            <summary>dst = src1 - src2 (saturated); where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.Multiply(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,System.Double,Emgu.CV.CvEnum.DepthType)">
+            <summary>dst = scale * src1 * src2 (saturated).</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.Divide(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,System.Double,Emgu.CV.CvEnum.DepthType)">
+            <summary>dst = scale * src1 / src2 (saturated); for integer images, dividing by 0 gives 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.AbsDiff(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray)">
+            <summary>dst = |src1 - src2|.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.BitwiseAnd(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray)">
+            <summary>dst = src1 AND src2, bit by bit; where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.BitwiseOr(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray)">
+            <summary>dst = src1 OR src2, bit by bit; where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.BitwiseXor(Emgu.CV.IInputArray,Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray)">
+            <summary>dst = src1 XOR src2, bit by bit; where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.BitwiseNot(Emgu.CV.IInputArray,Emgu.CV.IOutputArray,Emgu.CV.IInputArray)">
+            <summary>dst = NOT src, bit by bit (255 - value for byte images); where the mask is 0, dst is not changed.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.CountNonZero(Emgu.CV.IInputArray)">
+            <summary>The number of non-zero values of a single channel image.</summary>
+        </member>
+        <member name="M:Emgu.CV.CvInvoke.CopyMakeBorder(Emgu.CV.IInputArray,Emgu.CV.IOutputArray,System.Int32,System.Int32,System.Int32,System.Int32,Emgu.CV.CvEnum.BorderType,Emgu.CV.Structure.MCvScalar)">
+            <summary>
+            Copies src into the middle of dst, which must be (top + bottom) pixels higher and (left + right) pixels wider,
+            and fills the border as <paramref name="bordertype"/> says (with <paramref name="value"/> for a constant border).
+            </summary>
+        </member>
+        <member name="T:Emgu.CV.IColor">
+            <summary>
+            A color type (Gray, Bgr, Hsv, ...) of an <see cref="T:Emgu.CV.Image`2"/>.
+            </summary>
+        </member>
+        <member name="P:Emgu.CV.IColor.MCvScalar">
+            <summary>The channel values of the color, packed into a scalar.</summary>
+        </member>
+        <member name="P:Emgu.CV.IColor.Dimension">
+            <summary>The number of channels of the color.</summary>
+        </member>
+        <member name="T:Emgu.CV.IImage">
+            <summary>
+            An image of any color and depth, as in Emgu CV 3.x (the version of the faculty's framework).
+            Emgu CV 4.x removed this interface; code that must also build with Emgu CV 4.x can use <see cref="T:Emgu.CV.CvArray`1"/> instead.
+            </summary>
+        </member>
+        <member name="P:Emgu.CV.IImage.Size">
+            <summary>The width and height of the image, in pixels.</summary>
+        </member>
+        <member name="P:Emgu.CV.IImage.NumberOfChannels">
+            <summary>The number of channels of every pixel.</summary>
+        </member>
+        <member name="M:Emgu.CV.IImage.Split">
+            <summary>The channels of the image, each as a single channel image.</summary>
+        </member>
+        <member name="M:Emgu.CV.IImage.MinMax(System.Double[]@,System.Double[]@,System.Drawing.Point[]@,System.Drawing.Point[]@)">
+            <summary>The minimum and maximum value of every channel, and where they are.</summary>
+        </member>
+        <member name="T:Emgu.CV.IInputArray">
+            <summary>An array that can be the input of the <see cref="T:Emgu.CV.CvInvoke"/> functions: an image or a <see cref="T:Emgu.CV.ScalarArray"/>.</summary>
+        </member>
+        <member name="T:Emgu.CV.IOutputArray">
+            <summary>An array that can be the output of the <see cref="T:Emgu.CV.CvInvoke"/> functions (an image).</summary>
+        </member>
+        <member name="T:Emgu.CV.IInputOutputArray">
+            <summary>An array that can be both the input and the output of the <see cref="T:Emgu.CV.CvInvoke"/> functions (an image).</summary>
+        </member>
+        <member name="T:Emgu.CV.Image`2">
+            <summary>
+            An image whose pixels have the color type <typeparamref name="TColor"/> (Gray, Bgr, ...) and the channel
+            depth <typeparamref name="TDepth"/> (byte, float, ...). The pixels are stored in <see cref="P:Emgu.CV.Image`2.Data"/>
+            as [row, column, channel], so the pixel at (x, y) is Data[y, x, channel].
+            </summary>
+            <remarks>
+            This is a pure C# implementation of the Emgu CV Image class with the same names, signatures and results,
+            but without native OpenCV. Unlike Emgu CV, the rows of <see cref="P:Emgu.CV.Image`2.Data"/> are never padded,
+            so Data.GetLength(1) always equals <see cref="P:Emgu.CV.CvArray`1.Width"/>.
+            The arithmetic methods and operators work element by element, and their results are saturated
+            (for example, for byte images 200 + 100 = 255 and 100 - 200 = 0).
+            </remarks>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Add(Emgu.CV.Image{`0,`1})">
+            <summary>this + img2.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Add(Emgu.CV.Image{`0,`1},Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this + img2 where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Add(`0)">
+            <summary>this + val (val is rounded first for integer images).</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Sub(Emgu.CV.Image{`0,`1})">
+            <summary>this - img2.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Sub(Emgu.CV.Image{`0,`1},Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this - img2 where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Sub(`0)">
+            <summary>this - val.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.SubR(`0)">
+            <summary>val - this.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.SubR(`0,Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>val - this where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Mul(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>scale * this * img2, element by element.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Mul(Emgu.CV.Image{`0,`1})">
+            <summary>this * img2, element by element.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Mul(System.Double)">
+            <summary>this * scale.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.AbsDiff(Emgu.CV.Image{`0,`1})">
+            <summary>|this - img2|.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.AbsDiff(`0)">
+            <summary>|this - color|.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.And(Emgu.CV.Image{`0,`1})">
+            <summary>this AND img2, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.And(Emgu.CV.Image{`0,`1},Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this AND img2, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.And(`0)">
+            <summary>this AND val, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.And(`0,Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this AND val, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Or(Emgu.CV.Image{`0,`1})">
+            <summary>this OR img2, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Or(Emgu.CV.Image{`0,`1},Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this OR img2, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Or(`0)">
+            <summary>this OR val, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Or(`0,Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this OR val, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Xor(Emgu.CV.Image{`0,`1})">
+            <summary>this XOR img2, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Xor(Emgu.CV.Image{`0,`1},Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this XOR img2, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Xor(`0)">
+            <summary>this XOR val, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Xor(`0,Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>this XOR val, bit by bit, where the mask is not 0, black elsewhere.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Addition(Emgu.CV.Image{`0,`1},Emgu.CV.Image{`0,`1})">
+            <summary>img1 + img2, element by element.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Addition(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>val + img1: val is added to every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Addition(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>image + value: value is added to every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Addition(Emgu.CV.Image{`0,`1},`0)">
+            <summary>image + value, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Addition(`0,Emgu.CV.Image{`0,`1})">
+            <summary>value + image, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Subtraction(Emgu.CV.Image{`0,`1},Emgu.CV.Image{`0,`1})">
+            <summary>image1 - image2, element by element.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Subtraction(Emgu.CV.Image{`0,`1},`0)">
+            <summary>image - value, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Subtraction(`0,Emgu.CV.Image{`0,`1})">
+            <summary>value - image, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Subtraction(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>value - image, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Subtraction(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>image - value, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Multiply(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>image * scale.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Multiply(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>scale * image.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Division(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>image / scale.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_Division(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>scale / image, element by element.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseAnd(Emgu.CV.Image{`0,`1},Emgu.CV.Image{`0,`1})">
+            <summary>img1 AND img2, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseAnd(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>img1 AND val, bit by bit, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseAnd(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>val AND img1, bit by bit, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseAnd(Emgu.CV.Image{`0,`1},`0)">
+            <summary>img1 AND val, bit by bit, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseAnd(`0,Emgu.CV.Image{`0,`1})">
+            <summary>val AND img1, bit by bit, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseOr(Emgu.CV.Image{`0,`1},Emgu.CV.Image{`0,`1})">
+            <summary>img1 OR img2, bit by bit.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseOr(Emgu.CV.Image{`0,`1},System.Double)">
+            <summary>img1 OR val, bit by bit, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseOr(System.Double,Emgu.CV.Image{`0,`1})">
+            <summary>val OR img1, bit by bit, for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseOr(Emgu.CV.Image{`0,`1},`0)">
+            <summary>img1 OR val, bit by bit, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_BitwiseOr(`0,Emgu.CV.Image{`0,`1})">
+            <summary>val OR img1, bit by bit, channel by channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.op_OnesComplement(Emgu.CV.Image{`0,`1})">
+            <summary>NOT image: every bit inverted (255 - value for byte images).</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.#ctor(System.Int32,System.Int32)">
+            <summary>Creates a black image of the given size.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.#ctor(System.Drawing.Size)">
+            <summary>Creates a black image of the given size.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.#ctor(System.Int32,System.Int32,`0)">
+            <summary>Creates an image of the given size with every pixel set to <paramref name="value"/>.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.#ctor(`1[0:,0:,0:])">
+            <summary>Creates an image from a copy of the [row, column, channel] array <paramref name="data"/>.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.#ctor(Emgu.CV.Image{Emgu.CV.Structure.Gray,`1}[])">
+            <summary>Creates an image by merging single channel images (for example the result of <see cref="M:Emgu.CV.Image`2.Split"/>).</summary>
+        </member>
+        <member name="P:Emgu.CV.Image`2.Data">
+            <summary>
+            The pixel values as [row, column, channel]. Changing the array changes the image;
+            assigning an array copies it into the image.
+            </summary>
+        </member>
+        <member name="P:Emgu.CV.Image`2.ManagedArray">
+            <inheritdoc/>
+        </member>
+        <member name="P:Emgu.CV.Image`2.Item(System.Int32,System.Int32)">
+            <summary>The color of the pixel at the given row (y) and column (x).</summary>
+        </member>
+        <member name="P:Emgu.CV.Image`2.Item(System.Drawing.Point)">
+            <summary>The color of the pixel at the given location (X is the column, Y is the row).</summary>
+        </member>
+        <member name="P:Emgu.CV.Image`2.Item(System.Int32)">
+            <summary>A copy of one channel of the image; setting it copies a single channel image into that channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Clone">
+            <summary>A copy of the image, with its own pixels.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Copy(Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>Copies the image; with a mask, the pixels where the mask is 0 are black in the copy.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Copy(System.Drawing.Rectangle)">
+            <summary>Copies the region <paramref name="roi"/> of the image.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.CopyBlank">
+            <summary>Creates a black image with the same size, color and depth.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Split">
+            <summary>Splits the image into single channel images, one per channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.SetValue(`0)">
+            <summary>Sets every pixel to <paramref name="color"/>.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.SetValue(`0,Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>Sets the pixels where <paramref name="mask"/> is not 0 to <paramref name="color"/>.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Convert``2">
+            <summary>
+            Converts the image to another color and/or depth, exactly like Emgu CV:
+            colors are converted with OpenCV's formulas, and converting to byte rescales the values
+            to [0, 255] when they do not fit in that range.
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.ConvertFrom``2(Emgu.CV.Image{``0,``1})">
+            <summary>Converts <paramref name="srcImage"/> (same size) into this image's color and depth.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Convert``1(System.Func{`1,``0})">
+            <summary>Creates an image of another depth by applying <paramref name="converter"/> to every channel value.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Convert``1(System.Func{`1,System.Int32,System.Int32,``0})">
+            <summary>
+            Creates an image of another depth by applying <paramref name="converter"/> to every channel value;
+            the converter also receives the row and the column of the pixel.
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Convert``2(Emgu.CV.Image{`0,``0},System.Func{`1,``0,``1})">
+            <summary>Combines this image with <paramref name="img2"/> (same size) value by value.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Action(System.Action{`1})">
+            <summary>Calls <paramref name="action"/> for every channel value.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Flip(Emgu.CV.CvEnum.FlipType)">
+            <summary>Flips the image (Vertical: upside down, Horizontal: left-right, Both: both).</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2._Flip(Emgu.CV.CvEnum.FlipType)">
+            <summary>Flips the image in place.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Not">
+            <summary>Inverts every bit of every value (for byte images: 255 - value).</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.GetAverage">
+            <summary>The average value of each channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.GetAverage(Emgu.CV.Image{Emgu.CV.Structure.Gray,System.Byte})">
+            <summary>The average value of each channel over the pixels where <paramref name="mask"/> is not 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.GetSum">
+            <summary>The sum of the values of each channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.MinMax(System.Double[]@,System.Double[]@,System.Drawing.Point[]@,System.Drawing.Point[]@)">
+            <summary>The minimum and maximum value of each channel and their first locations (X = column, Y = row).</summary>
+        </member>
+        <member name="M:Emgu.CV.Image`2.Equals(Emgu.CV.Image{`0,`1})">
+            <summary>True if both images have the same size and the same pixel values.</summary>
+        </member>
+        <member name="T:Emgu.CV.ScalarArray">
+            <summary>A scalar (one value per channel) used as an input of the <see cref="T:Emgu.CV.CvInvoke"/> functions.</summary>
+        </member>
+        <member name="M:Emgu.CV.ScalarArray.#ctor(System.Double)">
+            <summary>A scalar with the same value for every channel.</summary>
+        </member>
+        <member name="M:Emgu.CV.ScalarArray.#ctor(Emgu.CV.Structure.MCvScalar)">
+            <summary>A scalar with one value per channel (V0 for channel 0, V1 for channel 1, ...).</summary>
+        </member>
+        <member name="M:Emgu.CV.ScalarArray.Dispose">
+            <summary>Releases the scalar (kept for compatibility with Emgu CV: there is nothing to release).</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Bgr">
+            <summary>
+            A color with blue, green and red channels (in this order).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given blue, green and red values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.#ctor(System.Drawing.Color)">
+            <summary>The color of a System.Drawing.Color (its B, G and R values).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgr.Blue">
+            <summary>The blue channel (channel 0).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgr.Green">
+            <summary>The green channel (channel 1).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgr.Red">
+            <summary>The red channel (channel 2).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgr.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgr.MCvScalar">
+            <summary>The channel values: V0 = blue, V1 = green, V2 = red.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.Equals(Emgu.CV.Structure.Bgr)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgr.ToString">
+            <summary>The channel values as text: [blue,green,red].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Bgra">
+            <summary>
+            A color with blue, green, red and alpha channels (in this order).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgra.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>A color with the given blue, green, red and alpha values.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.Blue">
+            <summary>The blue channel (channel 0).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.Green">
+            <summary>The green channel (channel 1).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.Red">
+            <summary>The red channel (channel 2).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.Alpha">
+            <summary>The alpha (opacity) channel (channel 3).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.Dimension">
+            <summary>The number of channels: 4.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Bgra.MCvScalar">
+            <summary>The channel values: V0 = blue, V1 = green, V2 = red, V3 = alpha.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgra.Equals(Emgu.CV.Structure.Bgra)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgra.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgra.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Bgra.ToString">
+            <summary>The channel values as text: [blue,green,red,alpha].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Gray">
+            <summary>
+            A gray (single channel) color.
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Gray.#ctor(System.Double)">
+            <summary>A gray color with the given intensity.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Gray.Intensity">
+            <summary>The intensity (the gray level): for byte images, 0 is black and 255 is white.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Gray.Dimension">
+            <summary>The number of channels: 1.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Gray.MCvScalar">
+            <summary>The channel values: V0 = intensity.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Gray.Equals(Emgu.CV.Structure.Gray)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Gray.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Gray.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Gray.ToString">
+            <summary>The channel values as text: [intensity].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Hls">
+            <summary>
+            A color with hue, lightness and saturation channels (in this order).
+            For 8-bit images the hue is in [0, 180), for floating point images in [0, 360).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hls.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given hue, lightness and saturation.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hls.Hue">
+            <summary>The hue (channel 0): in [0, 180) for byte images (the angle in degrees divided by 2), in [0, 360) for float images.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hls.Lightness">
+            <summary>The lightness (channel 1): the mean of the largest and the smallest of the blue, green and red values.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hls.Satuation">
+            <summary>The saturation (named as in Emgu CV).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hls.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hls.MCvScalar">
+            <summary>The channel values: V0 = hue, V1 = lightness, V2 = saturation.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hls.Equals(Emgu.CV.Structure.Hls)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hls.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hls.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hls.ToString">
+            <summary>The channel values as text: [hue,lightness,saturation].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Hsv">
+            <summary>
+            A color with hue, saturation and value channels (in this order).
+            For 8-bit images the hue is in [0, 180), for floating point images in [0, 360).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hsv.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given hue, saturation and value.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hsv.Hue">
+            <summary>The hue (channel 0): in [0, 180) for byte images (the angle in degrees divided by 2), in [0, 360) for float images.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hsv.Satuation">
+            <summary>The saturation (named as in Emgu CV).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hsv.Value">
+            <summary>The value (channel 2): the largest of the blue, green and red values.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hsv.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Hsv.MCvScalar">
+            <summary>The channel values: V0 = hue, V1 = saturation, V2 = value.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hsv.Equals(Emgu.CV.Structure.Hsv)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hsv.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hsv.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Hsv.ToString">
+            <summary>The channel values as text: [hue,saturation,value].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Lab">
+            <summary>
+            A CIE L*a*b* color; as in Emgu CV, the channels L, a and b are named X, Y and Z.
+            For 8-bit images L is scaled to [0, 255] and 128 is added to a and b;
+            for float images L is in [0, 100] (and the Bgr input is expected in [0, 1]).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Lab.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given L (x), a (y) and b (z) values.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Lab.X">
+            <summary>The lightness L.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Lab.Y">
+            <summary>The green-red component a.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Lab.Z">
+            <summary>The blue-yellow component b.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Lab.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Lab.MCvScalar">
+            <summary>The channel values: V0 = L, V1 = a, V2 = b.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Lab.Equals(Emgu.CV.Structure.Lab)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Lab.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Lab.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Lab.ToString">
+            <summary>The channel values as text: [L,a,b].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.MCvScalar">
+            <summary>
+            Up to four double values, one per channel.
+            </summary>
+        </member>
+        <member name="F:Emgu.CV.Structure.MCvScalar.V0">
+            <summary>The first value (channel 0).</summary>
+        </member>
+        <member name="F:Emgu.CV.Structure.MCvScalar.V1">
+            <summary>The second value (channel 1).</summary>
+        </member>
+        <member name="F:Emgu.CV.Structure.MCvScalar.V2">
+            <summary>The third value (channel 2).</summary>
+        </member>
+        <member name="F:Emgu.CV.Structure.MCvScalar.V3">
+            <summary>The fourth value (channel 3).</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.#ctor(System.Double)">
+            <summary>A scalar with the value v0; the other values are 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.#ctor(System.Double,System.Double)">
+            <summary>A scalar with the values v0 and v1; the other values are 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A scalar with the values v0, v1 and v2; V3 is 0.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>A scalar with the values v0, v1, v2 and v3.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.ToArray">
+            <summary>The four values: { V0, V1, V2, V3 }.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.Equals(Emgu.CV.Structure.MCvScalar)">
+            <summary>Whether all four values are equal.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.MCvScalar.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="T:Emgu.CV.Structure.Rgb">
+            <summary>
+            A color with red, green and blue channels (in this order).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given red, green and blue values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.#ctor(System.Drawing.Color)">
+            <summary>The color of a System.Drawing.Color (its R, G and B values).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgb.Red">
+            <summary>The red channel (channel 0).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgb.Green">
+            <summary>The green channel (channel 1).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgb.Blue">
+            <summary>The blue channel (channel 2).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgb.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgb.MCvScalar">
+            <summary>The channel values: V0 = red, V1 = green, V2 = blue.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.Equals(Emgu.CV.Structure.Rgb)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgb.ToString">
+            <summary>The channel values as text: [red,green,blue].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Rgba">
+            <summary>
+            A color with red, green, blue and alpha channels (in this order).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgba.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>A color with the given red, green, blue and alpha values.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.Red">
+            <summary>The red channel (channel 0).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.Green">
+            <summary>The green channel (channel 1).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.Blue">
+            <summary>The blue channel (channel 2).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.Alpha">
+            <summary>The alpha (opacity) channel (channel 3).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.Dimension">
+            <summary>The number of channels: 4.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Rgba.MCvScalar">
+            <summary>The channel values: V0 = red, V1 = green, V2 = blue, V3 = alpha.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgba.Equals(Emgu.CV.Structure.Rgba)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgba.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgba.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Rgba.ToString">
+            <summary>The channel values as text: [red,green,blue,alpha].</summary>
+        </member>
+        <member name="T:Emgu.CV.Structure.Ycc">
+            <summary>
+            A color with luma (Y), red difference (Cr) and blue difference (Cb) channels (in this order).
+            </summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Ycc.#ctor(System.Double,System.Double,System.Double)">
+            <summary>A color with the given luma (y), red difference (cr) and blue difference (cb).</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Ycc.Y">
+            <summary>The luma (channel 0): the brightness.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Ycc.Cr">
+            <summary>The red difference (channel 1); for byte images 128 means no difference.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Ycc.Cb">
+            <summary>The blue difference (channel 2); for byte images 128 means no difference.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Ycc.Dimension">
+            <summary>The number of channels: 3.</summary>
+        </member>
+        <member name="P:Emgu.CV.Structure.Ycc.MCvScalar">
+            <summary>The channel values: V0 = Y, V1 = Cr, V2 = Cb.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Ycc.Equals(Emgu.CV.Structure.Ycc)">
+            <summary>Whether both colors have the same channel values.</summary>
+        </member>
+        <member name="M:Emgu.CV.Structure.Ycc.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Ycc.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Emgu.CV.Structure.Ycc.ToString">
+            <summary>The channel values as text: [Y,Cr,Cb].</summary>
+        </member>
+    </members>
+</doc>

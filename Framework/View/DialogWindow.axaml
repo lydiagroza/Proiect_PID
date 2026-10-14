@@ -1,0 +1,64 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:local="using:Framework.ViewModel"
+               x:Class="Framework.View.DialogWindow"
+               x:DataType="local:DialogVM"
+               Title="Dialog Box"
+               Closing="WindowClosing"
+               MinHeight="100"
+               SizeToContent="Height"
+               Width="400"
+               WindowStartupLocation="CenterOwner"
+               CanResize="False"
+               Icon="/Images/Icon.png">
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="20,*,Auto,20"
+          ColumnDefinitions="20,*,20">
+
+        <!-- The labels inherit the text color; the text boxes keep their own colors -->
+        <ItemsControl x:Name="parameterList"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      Focusable="False"
+                      Foreground="{Binding Path=Theme.TextForeground}"
+                      ItemsSource="{Binding Path=Parameters}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:DialogVM+DialogParameter">
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="{Binding Path=ParamText}"
+                                   Margin="0,0,0,4"/>
+                        <TextBox Text="{Binding Path=InputText}"
+                                 Loaded="ParameterBoxLoaded"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="10">
+            <Button Content="Done"
+                    IsDefault="True"
+                    Width="70"
+                    HorizontalContentAlignment="Center"
+                    BorderThickness="2"
+                    Foreground="{Binding Path=Theme.ButtonForegroundColor}"
+                    Background="{Binding Path=Theme.ButtonBackgroundColor}"
+                    BorderBrush="{Binding Path=Theme.ButtonBorderBrush}"
+                    Click="DoneClick"/>
+            <Button Content="Cancel"
+                    IsCancel="True"
+                    Width="70"
+                    HorizontalContentAlignment="Center"
+                    BorderThickness="2"
+                    Foreground="{Binding Path=Theme.ButtonForegroundColor}"
+                    Background="{Binding Path=Theme.ButtonBackgroundColor}"
+                    BorderBrush="{Binding Path=Theme.ButtonBorderBrush}"
+                    Click="CancelClick"/>
+        </StackPanel>
+    </Grid>
+</v:ChildWindow>

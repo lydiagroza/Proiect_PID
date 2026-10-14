@@ -1,0 +1,74 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:local="using:Framework.ViewModel"
+               x:Class="Framework.View.MagnifierWindow"
+               x:DataType="local:MagnifierVM"
+               Title="Magnifier"
+               Closing="WindowClosing"
+               Height="600"
+               Width="1000"
+               WindowStartupLocation="CenterScreen"
+               CanResize="False"
+               Icon="/Images/Icon.png">
+
+    <v:ChildWindow.Resources>
+        <!-- 9 x 9 magnified pixels -->
+        <ItemsPanelTemplate x:Key="gridPanel">
+            <UniformGrid Rows="9" Columns="9"/>
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="cellTemplate" x:DataType="local:MagnifierVM+MagnifierCell">
+            <Border Background="{Binding Path=Fill}"
+                    BorderBrush="{Binding Path=BorderBrush}"
+                    BorderThickness="{Binding Path=BorderThickness}">
+                <TextBlock Text="{Binding Path=Text}"
+                           Foreground="{Binding Path=TextBrush}"
+                           FontSize="10"
+                           FontWeight="Bold"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
+    </v:ChildWindow.Resources>
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="15,40,*,15"
+          ColumnDefinitions="15,*,20,*,15">
+
+        <ItemsControl Grid.Row="2"
+                      Grid.Column="1"
+                      ItemsSource="{Binding Path=InitialMagnifierCells}"
+                      ItemsPanel="{StaticResource gridPanel}"
+                      ItemTemplate="{StaticResource cellTemplate}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Width="450"
+                      Height="450"/>
+
+        <ItemsControl Grid.Row="2"
+                      Grid.Column="3"
+                      ItemsSource="{Binding Path=ProcessedMagnifierCells}"
+                      ItemsPanel="{StaticResource gridPanel}"
+                      ItemTemplate="{StaticResource cellTemplate}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Width="450"
+                      Height="450"/>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   Text="Initial Image"
+                   FontSize="15"
+                   Foreground="{Binding Path=Theme.TextForeground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="1"
+                   Grid.Column="3"
+                   Text="Processed Image"
+                   FontSize="15"
+                   Foreground="{Binding Path=Theme.TextForeground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+    </Grid>
+</v:ChildWindow>

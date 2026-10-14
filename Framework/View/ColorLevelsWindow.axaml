@@ -1,0 +1,94 @@
+<v:ChildWindow xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:v="using:Framework.View"
+               xmlns:controls="using:Framework.View.Controls"
+               xmlns:local="using:Framework.ViewModel.ColorLevels"
+               x:Class="Framework.View.ColorLevelsWindow"
+               x:DataType="local:ColorLevelsVM"
+               Title="{Binding Path=Title}"
+               Closing="WindowClosing"
+               Height="550"
+               Width="1200"
+               WindowStartupLocation="CenterScreen"
+               CanResize="False"
+               Icon="/Images/Icon.png">
+
+    <Grid Background="{Binding Path=Theme.BackgroundColor}"
+          RowDefinitions="15,40,*,15"
+          ColumnDefinitions="15,450,*,450,15">
+
+        <controls:PlotView Grid.Row="2"
+                           Grid.Column="1"
+                           Background="AliceBlue"
+                           Model="{Binding Path=InitialPlot}"
+                           Width="440"
+                           Height="440"/>
+        <controls:PlotView Grid.Row="2"
+                           Grid.Column="3"
+                           Background="AliceBlue"
+                           Model="{Binding Path=ProcessedPlot}"
+                           Width="440"
+                           Height="440"/>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   Text="Initial Image"
+                   FontSize="15"
+                   Foreground="{Binding Path=Theme.TextForeground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="1"
+                   Grid.Column="3"
+                   Text="Processed Image"
+                   FontSize="15"
+                   Foreground="{Binding Path=Theme.TextForeground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="2"
+                   Text="Settings"
+                   FontSize="15"
+                   Foreground="{Binding Path=Theme.TextForeground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <Grid Grid.Row="2"
+              Grid.Column="2"
+              RowDefinitions="Auto,*"
+              ColumnDefinitions="*,*"
+              Margin="10,0,10,0">
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Text="{Binding Path=XPos}"
+                       Foreground="{Binding Path=Theme.TextForeground}"
+                       FontSize="15"
+                       Margin="0,10,0,0"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Text="{Binding Path=YPos}"
+                       Foreground="{Binding Path=Theme.TextForeground}"
+                       FontSize="15"
+                       Margin="0,10,0,0"
+                       HorizontalAlignment="Center"/>
+
+            <StackPanel Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="20"
+                        IsVisible="{Binding Path=HasColorImage}">
+                <CheckBox Content="Blue Channel"
+                          Foreground="{Binding Path=Theme.TextForeground}"
+                          IsChecked="{Binding Path=IsBlueChannelVisible}"/>
+                <CheckBox Content="Green Channel"
+                          Foreground="{Binding Path=Theme.TextForeground}"
+                          IsChecked="{Binding Path=IsGreenChannelVisible}"/>
+                <CheckBox Content="Red Channel"
+                          Foreground="{Binding Path=Theme.TextForeground}"
+                          IsChecked="{Binding Path=IsRedChannelVisible}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</v:ChildWindow>
