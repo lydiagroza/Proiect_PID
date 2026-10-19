@@ -49,5 +49,22 @@ namespace Algorithms.Sections
             return result;
         }
         #endregion
+
+        #region Gamma operator
+        public static byte[] GammaLUT(double gamma)
+        {
+            byte[] lut = new byte[256];
+
+            // c is chosen so that 255 stays 255: c * 255^gamma = 255  =>  c = 255^(1 - gamma)
+            double c = Math.Pow(255, 1 - gamma);
+
+            for (int r = 0; r < 256; ++r)
+            {
+                double s = c * Math.Pow(r, gamma);
+                lut[r] = (byte)Math.Clamp(Math.Round(s), 0, 255);
+            }
+            return lut;
+        }
+        #endregion
     }
 }

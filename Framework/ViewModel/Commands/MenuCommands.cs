@@ -517,6 +517,53 @@ namespace Framework.ViewModel.Commands
         }
         #endregion
 
+        #region Gamma operator
+        private ICommand _gammaOperatorCommand;
+        public ICommand GammaOperatorCommand
+        {
+            get
+            {
+                if (_gammaOperatorCommand == null)
+                    _gammaOperatorCommand = new RelayCommand(GammaOperator);
+                return _gammaOperatorCommand;
+            }
+        }
+
+        private async void GammaOperator(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            var window = new DialogWindow(_mainVM, new List<string> { "Gamma:" });
+            await window.ShowDialog();
+
+            List<double> values = window.GetValues();
+            if (values == null)
+                return;
+
+            double gamma = values[0];
+
+            if (gamma <= 0)
+            {
+                MessageBox.Show("Gamma must be strictly positive!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            byte[] lut = PointwiseOperations.GammaLUT(gamma);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = PointwiseOperations.ApplyLUT(GrayInitialImage, lut);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = PointwiseOperations.ApplyLUT(ColorInitialImage, lut);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Thresholding

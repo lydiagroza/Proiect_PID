@@ -21,5 +21,21 @@ namespace Algorithms.Utilities
             return histogram;
         }
         #endregion
+
+        #region Compute normalized histogram
+        public static double[] ComputeNormalizedHistogram(Image<Gray, byte> inputImage)
+        {
+            int[] histogram = ComputeHistogram(inputImage);
+            double numberOfPixels = inputImage.Width * inputImage.Height;
+
+            double[] normalizedHistogram = new double[256];
+            for (int i = 0; i < 256; ++i)
+            {
+                normalizedHistogram[i] = histogram[i] / numberOfPixels;
+            }
+
+            return normalizedHistogram;
+        }
+        #endregion
     }
 }
