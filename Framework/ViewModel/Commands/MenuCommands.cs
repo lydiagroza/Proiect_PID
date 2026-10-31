@@ -567,9 +567,131 @@ namespace Framework.ViewModel.Commands
         #endregion
 
         #region Thresholding
+
+        #region Otsu threshold
+        private ICommand _otsuThresholdCommand;
+        public ICommand OtsuThresholdCommand
+        {
+            get
+            {
+                if (_otsuThresholdCommand == null)
+                    _otsuThresholdCommand = new RelayCommand(OtsuThreshold);
+                return _otsuThresholdCommand;
+            }
+        }
+
+        private void OtsuThreshold(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            if (GrayInitialImage == null)
+            {
+                MessageBox.Show("Otsu threshold works only on grayscale images!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            int threshold = Thresholding.OtsuThreshold(GrayInitialImage);
+            GrayProcessedImage = Thresholding.Binarize(GrayInitialImage, threshold);
+
+            MessageBox.Show($"Otsu threshold: T = {threshold}");
+        }
+        #endregion
+
         #endregion
 
         #region Filters
+
+        #region Custom filter
+        private ICommand _separableFilterCommand;
+        public ICommand SeparableFilterCommand
+        {
+            get
+            {
+                if (_separableFilterCommand == null)
+                    _separableFilterCommand = new RelayCommand(SeparableFilter);
+                return _separableFilterCommand;
+            }
+        }
+
+        private void SeparableFilter(object parameter)
+        {
+            // the image is filtered with v, then the result is filtered with v transposed
+            double[,] v = { { 0.25, 0.5, 0.25 } };
+            double[,] vT = { { 0.25 }, { 0.5 }, { 0.25 } };
+
+            CustomFilter(parameter, v, vT);
+        }
+
+        private ICommand _squareFilterCommand;
+        public ICommand SquareFilterCommand
+        {
+            get
+            {
+                if (_squareFilterCommand == null)
+                    _squareFilterCommand = new RelayCommand(SquareFilter);
+                return _squareFilterCommand;
+            }
+        }
+
+        private void SquareFilter(object parameter)
+        {
+            double[,] mask =
+            {
+                { 0.1, 0.1, 0.1 },
+                { 0.1, 0.2, 0.1 },
+                { 0.1, 0.1, 0.1 }
+            };
+
+            CustomFilter(parameter, mask);
+        }
+
+        private ICommand _sharpeningFilterCommand;
+        public ICommand SharpeningFilterCommand
+        {
+            get
+            {
+                if (_sharpeningFilterCommand == null)
+                    _sharpeningFilterCommand = new RelayCommand(SharpeningFilter);
+                return _sharpeningFilterCommand;
+            }
+        }
+
+        private void SharpeningFilter(object parameter)
+        {
+            double[,] mask =
+            {
+                {  0, -1,  0 },
+                { -1,  5, -1 },
+                {  0, -1,  0 }
+            };
+
+            CustomFilter(parameter, mask);
+        }
+
+        private void CustomFilter(object parameter, params double[][,] masks)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            if (GrayInitialImage == null)
+            {
+                MessageBox.Show("Custom filter works only on grayscale images!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            Image<Gray, byte> result = GrayInitialImage;
+            foreach (double[,] mask in masks)
+                result = Filters.ApplyFilter(result, mask);
+
+            GrayProcessedImage = result;
+        }
+        #endregion
+
         #endregion
 
         #region Morphological operations

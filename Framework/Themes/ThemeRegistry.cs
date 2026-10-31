@@ -8,6 +8,7 @@ namespace Framework.Themes
         private static readonly Dictionary<string, ITheme> _themes =
             new Dictionary<string, ITheme>
             {
+                { "Rose Mist", RoseMistTheme.Instance },
                 { "Lime Green", LimeGreenTheme.Instance },
                 { "Forest Green", ForestGreenTheme.Instance },
                 { "Pale Pink", PalePinkTheme.Instance },

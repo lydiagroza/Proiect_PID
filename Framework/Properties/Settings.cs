@@ -17,7 +17,7 @@ namespace Framework.Properties
 
         public static Settings Default { get; } = Load();
 
-        public string Theme { get; set; } = "Lime Green";
+        public string Theme { get; set; } = "Rose Mist";
 
         public void Save()
         {

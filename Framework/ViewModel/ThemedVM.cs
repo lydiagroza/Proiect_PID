@@ -18,7 +18,7 @@ namespace Framework.ViewModel
             _messageBus.Subscribe<ThemeChangedMessage>(this, message => Theme = message.Theme);
         }
 
-        private ITheme _theme = LimeGreenTheme.Instance;
+        private ITheme _theme = RoseMistTheme.Instance;
         public ITheme Theme
         {
             get => _theme;

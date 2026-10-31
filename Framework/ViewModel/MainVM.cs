@@ -147,7 +147,7 @@ namespace Framework.ViewModel
             if (resolved != null)
                 Theme = resolved;
             else if (Theme == null)
-                Theme = LimeGreenTheme.Instance;
+                Theme = RoseMistTheme.Instance;
 
             _messageBus.Publish(new ThemeChangedMessage(Theme));
         }

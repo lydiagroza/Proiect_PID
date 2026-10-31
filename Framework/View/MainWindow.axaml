@@ -98,6 +98,10 @@
                       Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
                 <MenuItem Header="Theme"
                           x:Name="themeMenu">
+                    <MenuItem Header="Rose Mist"
+                              ToggleType="Radio"
+                              GroupName="Theme"
+                              Click="ThemeModeSelector"/>
                     <MenuItem Header="Lime Green"
                               ToggleType="Radio"
                               GroupName="Theme"
@@ -163,12 +167,25 @@
             <MenuItem Header="Thresholding"
                       Background="{Binding Path=Theme.MenuItemBackgroundColor}"
                       Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
-
+                <MenuItem Header="Otsu Threshold"
+                          Command="{Binding Path=MenuCommands.OtsuThresholdCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
             </MenuItem>
 
             <MenuItem Header="Filters"
                       Background="{Binding Path=Theme.MenuItemBackgroundColor}"
                       Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
+                <MenuItem Header="Custom Filter">
+                    <MenuItem Header="Separable filter v, then vᵀ"
+                              Command="{Binding Path=MenuCommands.SeparableFilterCommand}"
+                              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                    <MenuItem Header="Square filter (0.1 / 0.2)"
+                              Command="{Binding Path=MenuCommands.SquareFilterCommand}"
+                              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                    <MenuItem Header="Sharpening filter (5 / -1)"
+                              Command="{Binding Path=MenuCommands.SharpeningFilterCommand}"
+                              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                </MenuItem>
                 <MenuItem Header="Low-pass">
 
                 </MenuItem>
