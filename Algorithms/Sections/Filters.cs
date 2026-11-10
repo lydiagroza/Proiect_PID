@@ -31,7 +31,7 @@ namespace Algorithms.Sections
                         }
                     }
 
-                    resultImage.Data[y, x, 0] = (byte)Math.Round(Math.Min(255, Math.Max(sum, 0)));
+                    resultImage.Data[y, x, 0] = (byte)Math.Round(Math.Min(255, Math.Max(sum, 0)), MidpointRounding.AwayFromZero);
                 }
             }
 
