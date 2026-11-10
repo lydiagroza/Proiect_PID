@@ -692,6 +692,89 @@ namespace Framework.ViewModel.Commands
         }
         #endregion
 
+        #region Gaussian filter
+        private ICommand _gaussianFilterCommand;
+        public ICommand GaussianFilterCommand
+        {
+            get
+            {
+                if (_gaussianFilterCommand == null)
+                    _gaussianFilterCommand = new RelayCommand(GaussianFilter);
+                return _gaussianFilterCommand;
+            }
+        }
+
+        private async void GaussianFilter(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            var window = new DialogWindow(_mainVM, new List<string> { "Sigma X:", "Sigma Y:" });
+            await window.ShowDialog();
+
+            List<double> values = window.GetValues();
+            if (values == null)
+                return;
+
+            double sigmaX = values[0], sigmaY = values[1];
+            if (sigmaX <= 0 || sigmaY <= 0)
+            {
+                MessageBox.Show("Sigma must be strictly positive!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            if (GrayInitialImage != null)
+                GrayProcessedImage = Filters.GaussFiltering(GrayInitialImage, sigmaX, sigmaY);
+            else if (ColorInitialImage != null)
+                ColorProcessedImage = Filters.GaussFiltering(ColorInitialImage, sigmaX, sigmaY);
+        }
+        #endregion
+
+        #region Median filter
+        private ICommand _medianFilterCommand;
+        public ICommand MedianFilterCommand
+        {
+            get
+            {
+                if (_medianFilterCommand == null)
+                    _medianFilterCommand = new RelayCommand(MedianFilter);
+                return _medianFilterCommand;
+            }
+        }
+
+        private async void MedianFilter(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            if (GrayInitialImage == null)
+            {
+                MessageBox.Show("Median filter works only on grayscale images!");
+                return;
+            }
+
+            var window = new DialogWindow(_mainVM, new List<string> { "Mask size:" });
+            await window.ShowDialog();
+
+            List<double> values = window.GetValues();
+            if (values == null)
+                return;
+
+            int l = (int)values[0];
+            if (l < 1 || l / 2 >= Math.Min(GrayInitialImage.Width, GrayInitialImage.Height))
+            {
+                MessageBox.Show("Mask size must be positive and smaller than the image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            GrayProcessedImage = Filters.MedianFiltering(GrayInitialImage, l);
+        }
+        #endregion
+
         #endregion
 
         #region Morphological operations
