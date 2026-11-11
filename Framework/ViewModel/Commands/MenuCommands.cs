@@ -600,6 +600,38 @@ namespace Framework.ViewModel.Commands
         }
         #endregion
 
+        #region Max entropy threshold
+        private ICommand _maxEntropyThresholdCommand;
+        public ICommand MaxEntropyThresholdCommand
+        {
+            get
+            {
+                if (_maxEntropyThresholdCommand == null)
+                    _maxEntropyThresholdCommand = new RelayCommand(MaxEntropyThreshold);
+                return _maxEntropyThresholdCommand;
+            }
+        }
+
+        private void MaxEntropyThreshold(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            if (GrayInitialImage == null)
+            {
+                MessageBox.Show("MaxEntropy threshold works only on grayscale images!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            int threshold = Thresholding.MaxEntropyThreshold(GrayInitialImage);
+            GrayProcessedImage = Thresholding.Binarize(GrayInitialImage, threshold);
+
+            MessageBox.Show($"MaxEntropy threshold: T = {threshold}");
+        }
+        #endregion
+
         #endregion
 
         #region Filters

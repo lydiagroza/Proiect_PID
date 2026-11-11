@@ -170,6 +170,9 @@
                 <MenuItem Header="Otsu Threshold"
                           Command="{Binding Path=MenuCommands.OtsuThresholdCommand}"
                           CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                <MenuItem Header="MaxEntropy Threshold"
+                          Command="{Binding Path=MenuCommands.MaxEntropyThresholdCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
             </MenuItem>
 
             <MenuItem Header="Filters"
