@@ -44,7 +44,8 @@ namespace Algorithms.Sections
             int w = mask.GetLength(1);
             int h_offset = mask.GetLength(0) / 2;
             int w_offset = mask.GetLength(1) / 2;
-            Image<Gray, byte> borderedImage = new Image<Gray, byte>(inputImage.Width + w - 1, inputImage.Height + h - 1); // obiect alocat imaginii bordate
+            Image<Gray, byte> borderedImage = new Image<Gray, byte>(inputImage.Width + w - 1, inputImage.Height + h - 1); 
+            
             CvInvoke.CopyMakeBorder(inputImage, borderedImage, h_offset, h_offset, w_offset, w_offset, Emgu.CV.CvEnum.BorderType.Reflect101);
             Image<Gray, byte> resultBorderedImage = CalculateFilter(borderedImage, mask);
             Image<Gray, byte> resultImage = new Image<Gray, byte>(inputImage.Size);
@@ -169,5 +170,78 @@ namespace Algorithms.Sections
             return resultImage;
         }
         #endregion
+
+        #region Average filter 
+        public static long[,] IntegralImage(Image<Gray, byte> image)
+        {
+            long[,] I = new long[image.Height, image.Width];
+            for(int y = 0; y < image.Height; ++y)
+            {
+                for(int x = 0; x < image.Width; ++x)
+                {
+                    long f = image.Data[y, x, 0];
+                    if(x == 0 && y == 0)
+                        I[y,x] = f;
+                    else if (x == 0)
+                        I[y,x] = I[y - 1, x] + f;
+                    else if (y == 0)
+                        I[y,x] = I[y, x - 1] + f;
+                    else 
+                        I[y,x] = I[y - 1, x] + I[y, x - 1] - I[y - 1, x - 1] + f; 
+                }
+            }
+            return I;
+        }
+
+        public static long Sum(long[,] I, int x0, int y0, int x1, int y1)
+          {
+              long A = I[y1, x1];
+              if (x0 == 0 && y0 == 0)
+                  return A;
+              if (y0 == 0)
+                  return A - I[y1, x0 - 1];
+              if (x0 == 0)
+                  return A - I[y0 - 1, x1];
+
+              long B = I[y1, x0 - 1];
+              long C = I[y0 - 1, x0 - 1];
+              long D = I[y0 - 1, x1];
+              return A + C - B - D;
+          }
+
+          public static Image<Gray, byte> AverageFilter(Image<Gray, byte> inputImage, int h, int w)
+          {
+              if (h % 2 == 0) ++h;
+              if (w % 2 == 0) ++w;
+
+              Image<Gray, byte> borderedImage = new Image<Gray, byte>(inputImage.Width + w - 1, inputImage.Height + h - 1);
+              CvInvoke.CopyMakeBorder(inputImage, borderedImage, h / 2, h / 2, w / 2, w / 2, Emgu.CV.CvEnum.BorderType.Reflect101);
+
+              long[,] I = IntegralImage(borderedImage);
+              Image<Gray, byte> result = new Image<Gray, byte>(inputImage.Size);
+
+              for (int y = h / 2; y <= borderedImage.Height - h / 2 - 1; ++y)
+              {
+                  for (int x = w / 2; x <= borderedImage.Width - w / 2 - 1; ++x)
+                  {
+                      long sum = Sum(I, x - w / 2, y - h / 2, x + w / 2, y + h / 2);
+                      double mean = (double)sum / (h * w);
+                      result.Data[y - h / 2, x - w / 2, 0] = (byte)Math.Round(mean);
+                  }
+              }
+              return result;
+          }
+
+          public static Image<Bgr, byte> AverageFilter(Image<Bgr, byte> inputImage, int h, int w)
+          {
+              Image<Bgr, byte> result = new Image<Bgr, byte>(inputImage.Size);
+
+              for (int c = 0; c < 3; ++c)
+              {
+                  result[c] = AverageFilter(inputImage[c], h, w);
+              }
+              return result;
+          }
+          #endregion
     }
 }

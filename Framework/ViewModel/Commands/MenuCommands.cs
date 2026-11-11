@@ -775,7 +775,51 @@ namespace Framework.ViewModel.Commands
         }
         #endregion
 
+        #region Average filter
+        private ICommand _averageFilterCommand;
+        public ICommand AverageFilterCommand
+        {
+            get
+            {
+                if (_averageFilterCommand == null)
+                    _averageFilterCommand = new RelayCommand(AverageFilter);
+                return _averageFilterCommand;
+            }
+        }
+
+        private async void AverageFilter(object parameter)
+        {
+            if (!IsImageLoaded())
+                return;
+
+            var window = new DialogWindow(_mainVM, new List<string> { "Height (h):", "Width (w):" });
+            await window.ShowDialog();
+
+            List<double> values = window.GetValues();
+            if (values == null)
+                return;
+
+            int h = (int)values[0];
+            int w = (int)values[1];
+            if (h < 1 || w < 1)
+            {
+                MessageBox.Show("Mask size must be positive!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter);
+
+            if (GrayInitialImage != null)
+                GrayProcessedImage = Filters.AverageFilter(GrayInitialImage, h, w);
+            else if (ColorInitialImage != null)
+                ColorProcessedImage = Filters.AverageFilter(ColorInitialImage, h, w);
+        }
         #endregion
+
+        
+        #endregion
+
+        
 
         #region Morphological operations
         #endregion

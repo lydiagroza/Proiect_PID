@@ -193,6 +193,9 @@
                     <MenuItem Header="Median filter"
                               Command="{Binding Path=MenuCommands.MedianFilterCommand}"
                               CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                    <MenuItem Header="Average filter"
+                                Command="{Binding Path=MenuCommands.AverageFilterCommand}"
+                                CommandParameter="{Binding ElementName=processedImageCanvas}"/> 
                 </MenuItem>
                 <MenuItem Header="High-pass">
 
